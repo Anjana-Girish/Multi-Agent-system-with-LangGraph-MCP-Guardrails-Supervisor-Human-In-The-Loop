@@ -30,7 +30,7 @@ COPY . .
 # mcp.server.fastmcp module that the 2.0 release removed.
 RUN uv python install 3.13 \
     && uv venv --python 3.13 .mcp_aviationstack_venv \
-    && .mcp_aviationstack_venv/bin/python -m pip install --no-cache-dir \
+    && uv pip install --python .mcp_aviationstack_venv/bin/python \
         "mcp[cli]==1.28.1" aviationstack_mcp
 
 EXPOSE 8000
