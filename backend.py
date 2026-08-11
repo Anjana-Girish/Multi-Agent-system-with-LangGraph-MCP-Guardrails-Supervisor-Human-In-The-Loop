@@ -465,13 +465,22 @@ Hotel Results:
 Weather Results:
 {state.get('weather_results', '')}
 
-Return:
-1. Estimated cost categories
-2. Budget risk areas
-3. Money-saving suggestions
-4. Overall feasibility
+Return, in this order:
+1. A feasibility verdict as the first line, in exactly this form:
+   FEASIBILITY: FEASIBLE or FEASIBILITY: NOT FEASIBLE
+2. Estimated cost categories
+3. Budget risk areas
+4. Money-saving suggestions
 
-If exact live prices are unavailable, clearly label estimates as approximate.
+Rules:
+- If the stated budget cannot realistically cover the trip, verdict must be
+  NOT FEASIBLE. State that plainly and give the minimum realistic budget
+  instead. Do not quietly shrink the trip's scope (fewer days, a cheaper
+  destination, etc.) to make an unrealistic budget look like it works.
+- Every price you state must be labeled as an estimate (e.g. "approx. $X")
+  unless it came directly from the Flight Results or Hotel Results above.
+  Never present a specific number as fact when you do not actually have a
+  source for it.
 """
 
     response = llm.invoke(
@@ -515,6 +524,15 @@ Budget Results:
 
 Make the itinerary practical, budget-aware, and easy to follow.
 Create a clear draft that is ready for human review.
+
+Rules:
+- Do not invent specific numeric facts (temperatures, prices, flight
+  numbers, hotel names) that are not present in the specialist results
+  above. If a detail is missing or unavailable, say so plainly instead of
+  making one up.
+- If Budget Results state the trip is NOT FEASIBLE for the stated budget,
+  keep that warning visible in the itinerary instead of silently
+  presenting a revised plan as if it fits the original budget.
 """
 
     response = llm.invoke(
@@ -622,6 +640,12 @@ Important:
 - Include weather-based travel advice.
 - Keep the response useful for real travel planning.
 - Incorporate the human feedback when revision was requested.
+- Do not invent specific numeric facts (temperatures, prices, flight numbers,
+  hotel names) that are not present in the Flights/Hotels/Weather/Budget
+  results above. If a detail is missing, say so plainly.
+- If Budget Analysis says the trip is NOT FEASIBLE for the stated budget,
+  keep that warning visible in the Estimated Budget section instead of
+  silently presenting a revised plan as if it fits.
 """
 
     response = llm.invoke(
